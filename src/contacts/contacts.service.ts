@@ -6,6 +6,7 @@ import { Contact } from './entities/contact.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { NotFoundError } from 'rxjs';
+import { PaginationQueryDto } from './dto/pagination-query.dto';
 
 @Injectable()
 export class ContactsService {
@@ -24,15 +25,27 @@ export class ContactsService {
       longitude,
       user
     })
-
     return await this.contactsRepository.save(newContact);
   }
 
-  async findByUserId(id: number) {
+  async findByUserId(id: number, query: PaginationQueryDto) {
     const user = await this.usersService.findOne(id);
-    const contacts = await this.contactsRepository.find({where: {user}});
+    const {page, limit} = query;
+    const [contacts, total] = await this.contactsRepository.findAndCount({
+      where: {user},
+      take: limit,
+      skip: (page - 1) * limit,
+      order: { name: 'ASC'}
+      
+    });
     if(!contacts.length) throw new NotFoundException(`No contacts were found for user with id ${id}`);
-    return contacts;
+    return {
+      contacts,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findOne(id: number) {
