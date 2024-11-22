@@ -7,9 +7,11 @@ export class CreateContactDto {
     @IsString()
     name: string;
 
+    @IsOptional()
     @IsString()
     email: string;
 
+    @IsOptional()
     @IsString()
     phoneNumber: string;
 

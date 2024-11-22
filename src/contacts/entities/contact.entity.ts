@@ -10,11 +10,14 @@ export class Contact {
     @Column()
     name: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     email: string;
 
     @Column({
-        name: 'phone_number'
+        name: 'phone_number',
+        nullable: true
     })
     phoneNumber: string;
 
