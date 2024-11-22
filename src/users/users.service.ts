@@ -25,4 +25,10 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: {email}, select: {id: true, name: true, email: true, password: true, phoneNumber: true} });
   }
 
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const { affected } = await this.usersRepository.update(id, updateUserDto);
+    if(!affected) throw new NotFoundException('User was not found');
+    return await this.findOne(id);
+  }
+
 }

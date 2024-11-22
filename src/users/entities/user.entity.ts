@@ -28,6 +28,12 @@ export class User {
     })
     onboarding: boolean;
 
+    @Column({
+        type: 'boolean',
+        default: false
+    })
+    syncronization: boolean;
+
     @OneToMany(() => Contact, (contact) => contact.user)
     contacts: Contact[];
 }

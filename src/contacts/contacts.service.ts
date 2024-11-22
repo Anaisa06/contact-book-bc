@@ -18,6 +18,7 @@ export class ContactsService {
 
   async create(createContactDto: CreateContactDto) {
     const user = await this.usersService.findOne(createContactDto.userId);
+    console.log('aqui es')
     const {latitude, longitude} = createContactDto.location;
     const newContact = this.contactsRepository.create({
       ...createContactDto,
